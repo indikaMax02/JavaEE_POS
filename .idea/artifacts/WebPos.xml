@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="ear" name="WebPos">
+    <output-path>$PROJECT_DIR$/out/artifacts/WebPos</output-path>
+    <root id="archive" name="WebPos.ear">
+      <element id="directory" name="lib">
+        <element id="archive" name="javaEE.jar">
+          <element id="module-output" name="javaEE" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="javaEE/web/Web" />
+    </root>
+  </artifact>
+</component>
