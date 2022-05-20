@@ -8,7 +8,7 @@ genarateCustomerId();
 $("#btnSaveOrUpdate").click(function () {
 
 
-    alert("ok");
+
 
     var customer={
         id   : $("#txtCusId").val(),
@@ -27,6 +27,13 @@ $("#btnSaveOrUpdate").click(function () {
           data : JSON.stringify(customer),
 
           success : function (res){
+              if (res.status==200){
+                  alert(res.message);
+              }else if (res.status==400){
+                  alert(res.data)
+              }else {
+                  alert(res.data);
+              }
 
           }
 

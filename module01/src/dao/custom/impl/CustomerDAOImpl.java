@@ -11,7 +11,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public boolean add(Customer customer) throws SQLException, ClassNotFoundException {
-       return CrudUtil.executeUpdate("INSERT INTO Customer (id,name,tp,address) VALUES (?,?,?,?)",customer.getId(),customer.getName(),customer.getTp(),customer.getAddress());
+       return CrudUtil.executeUpdate("INSERT INTO Customer(custId,custName,tp,custAddress)VALUES (?,?,?,?)",customer.getId(),customer.getName(),customer.getTp(),customer.getAddress());
     }
 
     @Override
