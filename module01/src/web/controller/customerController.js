@@ -5,6 +5,8 @@ loadAllCustomer();
 
 
 
+
+
 $("#btnSaveOrUpdate").click(function () {
 
 
@@ -55,6 +57,42 @@ $("#btnSaveOrUpdate").click(function () {
       loadAllCustomer();*/
 
 });
+
+
+
+
+
+//search customer
+$("#btnCustomerSearch").click(function (){
+    $.ajax({
+        url :"customer?option=GETONE&id="+$("#txtSearchCusID").val(),
+        method : "GET",
+        success : function (res){
+               if (res.status==200){
+                  $("#txtCusId").val(res.data.id);
+                     $("#txtCusName").val(res.data.name);
+                     $("#txtCusTp").val(res.data.tp);
+                       $("#txtCusAddress").val(res.data.address);
+
+
+
+               }else if(res.status==400){
+                   alert(res.message);
+               }
+        }
+
+
+
+    });
+
+
+
+
+
+});
+
+
+
 
 function clearCustomerText() {
     $("#txtCusId").val("");

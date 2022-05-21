@@ -27,8 +27,10 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public Customer search(String s) throws SQLException, ClassNotFoundException {
-        return null;
+    public Customer search(String id) throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = CrudUtil.executeQuery("SELECT * FROM Customer WHERE custId=?", id);
+        resultSet.next();
+        return new Customer(resultSet.getString("custId"),resultSet.getString("custName"),resultSet.getString("tp"),resultSet.getString("custAddress"));
     }
 
     @Override
@@ -44,7 +46,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public boolean ifCustomerExist(String id) throws SQLException, ClassNotFoundException {
-        return false;
+        return CrudUtil.executeQuery("SELECT custId FROM Customer WHERE custId=?", id).next();
     }
 
     @Override
