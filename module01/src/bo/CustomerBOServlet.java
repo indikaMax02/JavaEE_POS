@@ -1,13 +1,11 @@
 package bo;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import dao.DAOFactory;
 import dao.custom.CustomerDAO;
 import entity.Customer;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
+import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +17,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 @WebServlet(urlPatterns = "/customer")
@@ -31,7 +30,7 @@ public class CustomerBOServlet extends HttpServlet {
 
 
         JsonReader reader = Json.createReader(req.getReader());
-        JsonObjectBuilder response = Json.createObjectBuilder();
+
         JsonObject jsonObject = reader.readObject();
 
         String id=jsonObject.getString("id");
@@ -40,13 +39,14 @@ public class CustomerBOServlet extends HttpServlet {
         String address=jsonObject.getString("address");
 
 
+        JsonObjectBuilder response =Json.createObjectBuilder();;
         PrintWriter writer = resp.getWriter();
         resp.setContentType("application/json");
         try {
             boolean add = customerDAO.add(new Customer(id, name, tp, address));
 
-            if (add==true) {
-                 response = Json.createObjectBuilder();
+            if (add) {
+
                 resp.setStatus(HttpServletResponse.SC_CREATED);//201
                 response.add("status", 200);
                 response.add("message", "Successfully Added");
@@ -66,7 +66,7 @@ public class CustomerBOServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_OK); //200
             e.printStackTrace();
         } catch (SQLException throwables) {
-            response = Json.createObjectBuilder();
+
             response.add("status", 400);
             response.add("message", "Error");
             response.add("data", throwables.getLocalizedMessage());
@@ -78,7 +78,55 @@ public class CustomerBOServlet extends HttpServlet {
     }
 
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+              String option=req.getParameter("option");
+              resp.setContentType("application/json");
+              switch (option){
+
+                  case "GETALL" :
+
+                      try {
+                          ArrayList<Customer> all = customerDAO.getAll();
+
+                          JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+
+
+                          for (Customer customer : all) {
+                              JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                              objectBuilder.add("id", customer.getId());
+                              objectBuilder.add("name" , customer.getName());
+                              objectBuilder.add("tp",customer.getTp());
+                              objectBuilder.add("address",customer.getAddress());
+
+                              arrayBuilder.add(objectBuilder.build());
+
+                          }
+
+
+                          JsonObjectBuilder response = Json.createObjectBuilder();
+                          response.add("status" , 200);
+                          response.add("message" , "Done");
+                          response.add("data" , arrayBuilder.build());
+
+                          PrintWriter writer = resp.getWriter();
+                          writer.print(response.build());
+
+
+
+
+                      } catch (SQLException e) {
+
+                          throw new RuntimeException(e);
+
+                      } catch (ClassNotFoundException e) {
+                          throw new RuntimeException(e);
+                      }
+                      break;
+
+              }
     }
+}
 
 
 

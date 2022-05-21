@@ -1,7 +1,7 @@
 
 
 
-genarateCustomerId();
+loadAllCustomer();
 
 
 
@@ -27,8 +27,16 @@ $("#btnSaveOrUpdate").click(function () {
           data : JSON.stringify(customer),
 
           success : function (res){
+
+
               if (res.status==200){
                   alert(res.message);
+
+                  loadAllCustomer();
+
+
+
+
               }else if (res.status==400){
                   alert(res.data)
               }else {
@@ -57,6 +65,25 @@ function clearCustomerText() {
 
 
 function loadAllCustomer(){
+
+    alert("load all Customer;")
+
+    $("#tblCustomerBody").empty();
+
+    $.ajax({
+        url:"customer?option=GETALL",
+        method : "GET",
+        success : function (resp){
+
+
+            for (const customer of resp.data){
+                let row=`<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.tp}</td><td>${customer.address}</td></tr>`;
+                $("#tblCustomerBody").append(row);
+            }
+
+        }
+
+    });
 
 }
 
