@@ -50,6 +50,10 @@ $("#btnSaveOrUpdate").click(function () {
       });
 
 
+
+
+
+
      /* customerDB.push(new Customer(id,name,tp,address));
       alert("Customer Added Completed..");
       clearCustomerText();
@@ -84,11 +88,30 @@ $("#btnCustomerSearch").click(function (){
 
 
     });
+});
+
+//delete Customer
+$("#btnDeleteCustomer").click(function (){
+
+
+    $.ajax({
+        url :"customer?id="+$("#txtSearchCusID").val(),
+        method : "DELETE",
+        success : function (res){
+
+            if (res.status == 200){
+                alert(res.message);
+            }else if(res.status == 400){
+                alert(res.message);
+            }
+
+
+        }
 
 
 
 
-
+    });
 });
 
 
