@@ -52,25 +52,28 @@ public class CustomerBOServlet extends HttpServlet {
                 response.add("message", "Successfully Added");
                 response.add("data", "");
                 writer.print(response.build());
+            }else {
+
             }
 
         } catch (ClassNotFoundException e) {
+            JsonObjectBuilder x = Json.createObjectBuilder();
+            x.add("status", 400);
+            x.add("message", "Error");
+            x.add("data", e.getLocalizedMessage());
+            writer.print(x.build());
 
-
-
-            response.add("status", 400);
-            response.add("message", "Error");
-            response.add("data", e.getLocalizedMessage());
-            writer.print(response.build());
 
             resp.setStatus(HttpServletResponse.SC_OK); //200
             e.printStackTrace();
         } catch (SQLException throwables) {
 
-            response.add("status", 400);
-            response.add("message", "Error");
-            response.add("data", throwables.getLocalizedMessage());
-            writer.print(response.build());
+            JsonObjectBuilder r = Json.createObjectBuilder();
+            r.add("status", 400);
+            r.add("message", "Error");
+            r.add("data", throwables.getLocalizedMessage());
+            writer.print(r.build());
+
 
             resp.setStatus(HttpServletResponse.SC_OK); //200
             throwables.printStackTrace();

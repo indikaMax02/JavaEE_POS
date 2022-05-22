@@ -2,25 +2,41 @@ package entity;
 
 import java.math.BigDecimal;
 
-/**
- * @author : Sanu Vithanage
- * @since : 0.1.0
- **/
+
 public class Item {
     private String code;
     private String description;
-    private int qtyOnHand;
-    private BigDecimal unitPrice;
+
+    private String unitPrice;
+    private String qtyOnHand;
+
+    public Item(String code, String description, String unitPrice, String qtyOnHand) {
+        this.code = code;
+        this.description = description;
+        this.unitPrice = unitPrice;
+        this.qtyOnHand = qtyOnHand;
+    }
+
+    public String getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(String unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public String getQtyOnHand() {
+        return qtyOnHand;
+    }
+
+    public void setQtyOnHand(String qtyOnHand) {
+        this.qtyOnHand = qtyOnHand;
+    }
 
     public Item() {
     }
 
-    public Item(String code, String description, int qtyOnHand, BigDecimal unitPrice) {
-        this.code = code;
-        this.description = description;
-        this.qtyOnHand = qtyOnHand;
-        this.unitPrice = unitPrice;
-    }
+
 
     public String getCode() {
         return code;
@@ -38,19 +54,5 @@ public class Item {
         this.description = description;
     }
 
-    public int getQtyOnHand() {
-        return qtyOnHand;
-    }
 
-    public void setQtyOnHand(int qtyOnHand) {
-        this.qtyOnHand = qtyOnHand;
-    }
-
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-    }
 }

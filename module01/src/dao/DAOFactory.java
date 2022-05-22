@@ -1,6 +1,7 @@
 package dao;
 
 import dao.custom.impl.CustomerDAOImpl;
+import dao.custom.impl.ItemDAOImpl;
 import jdk.nashorn.internal.runtime.regexp.JoniRegExp;
 
 public class DAOFactory {
@@ -18,13 +19,16 @@ public class DAOFactory {
     }
 
     public enum DAOTypes{
-        CUSTOMER
+        CUSTOMER, ITEM
     }
 
     public SuperDAO getDAO (DAOTypes types){
         switch (types){
 
             case CUSTOMER: return new CustomerDAOImpl();
+
+            case ITEM:  return new ItemDAOImpl();
+
             default: return null;
         }
     }
