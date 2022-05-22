@@ -35,10 +35,13 @@ public class ItemBOServlet extends HttpServlet {
 
                 try {
 
+
                     if(itemDAO.ifItemExist(req.getParameter("id"))){
 
 
                         Item item = itemDAO.search(req.getParameter("id"));
+
+                        System.out.println(item.getCode()+" "+item.getDescription()+" "+item.getQtyOnHand()+" "+item.getUnitPrice());
 
                         JsonObjectBuilder jsonOb = Json.createObjectBuilder();
                         jsonOb.add("code",item.getCode());
@@ -197,6 +200,58 @@ public class ItemBOServlet extends HttpServlet {
         } catch (ClassNotFoundException a) {
 
             throw new RuntimeException(a);
+        }
+
+    }
+
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String id = req.getParameter("id");
+        PrintWriter writer = resp.getWriter();
+        resp.setContentType("application/json");
+
+        try {
+
+            if(itemDAO.delete(id)){
+
+                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                objectBuilder.add("status", 200);
+                objectBuilder.add("data", "");
+                objectBuilder.add("message", "Successfully Deleted Item");
+                writer.print(objectBuilder.build());
+
+            }else {
+                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                objectBuilder.add("status", 400);
+                objectBuilder.add("data", "");
+                objectBuilder.add("message", "Item Delete Fail");
+                writer.print(objectBuilder.build());
+            }
+
+
+        } catch (SQLException e) {
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            response.add("status", 400);
+            response.add("message", "Error");
+            response.add("data", e.getLocalizedMessage());
+            writer.print(response.build());
+
+            resp.setStatus(HttpServletResponse.SC_OK); //200
+
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            response.add("status", 400);
+            response.add("message", "Error");
+            response.add("data", e.getLocalizedMessage());
+            writer.print(response.build());
+
+            resp.setStatus(HttpServletResponse.SC_OK); //200
+
+            throw new RuntimeException(e);
         }
 
     }
