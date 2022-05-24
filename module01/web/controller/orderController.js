@@ -5,24 +5,30 @@ $("#txtSelectItemCode").on('keyup',function (e) {
       console.log(e.key);
     var existItem=0;
     if (e.key=="Enter") {
-        var itemCode = $("#txtSelectItemCode").val();
 
-        for (var i in itemDB) {
-            if (itemCode == itemDB[i].getId()) {
-                $("#txtSelectItemDescription").val(itemDB[i].getName());
-                $("#txtSelectItemPrice").val(itemDB[i].getPrice());
-                $("#txtSelectQTYOnHand").val(itemDB[i].getQty());
-                $("#txtSelectItemDiscount").val(itemDB[i].getDiscount());
-                 existItem=1;
+        $.ajax({
+            url: "item?option=GETONE&id="+$("#txtSelectItemCode").val(),
+            method: "GET",
+
+            success : function (res){
+                if (res.status==200){
+
+
+                    $("#txtSelectItemDescription").val(res.data.desc);
+                    $("#txtSelectItemPrice").val(res.data.unitPrice);
+                    $("#txtSelectQTYOnHand").val(res.data.qty);
+
+                }else if (res.status==400){
+                    alert("Item not found");
+                }
+            },
+
+            error : function (res){
+                alert("System Error");
             }
-        }
-        if (existItem==0){
-            $("#txtSelectItemDescription").val('');
-            $("#txtSelectItemPrice").val('');
-            $("#txtxtICodetSelectQTYOnHand").val('');
-            $("#txtSelectItemDiscount").val('');
-            alert("No Such as Item..!");
-        }
+
+
+        })
 
     }
 });
@@ -35,23 +41,28 @@ $("#txtSelectItemCode").on('keyup',function (e) {
 //add to cart start
 $("#btnAddToTable").click(function () {
 
+
    var itemCode= $("#txtSelectItemCode").val();
    var itemName= $("#txtSelectItemDescription").val();
    var itemPrice= $("#txtSelectItemPrice").val();
    var qtyOnHand=$("#txtSelectQTYOnHand").val();
 
+    var qty=parseInt( $("#txtQty").val());
 
-  var qty=parseInt( $("#txtQty").val());
+  /*  var itemFinallyPrice= itemPrice-((discount/100)*itemPrice);*/
+  /*  var totalItemPrice=itemPrice*qty;*/
+
 
   //var itemFinallyPrice= itemPrice-((discount/100)*itemPrice);
   var totalItemPrice=itemPrice*qty;
+  console.log(totalItemPrice);
 
 
       var itemExist=0;
       for(var i in cartItems){
           if (cartItems[i].getItemCode()==itemCode){
 
-             var oldItemQty =cartItems[i].getItemQty();
+             var oldItemQty =parseInt(cartItems[i].getItemQty());
              var newItemQty=oldItemQty+qty;
 
               cartItems[i].setItemQty(newItemQty);
@@ -62,23 +73,23 @@ $("#btnAddToTable").click(function () {
               break;
           }
       }
+
+
       if (itemExist==0){
-          var orderCart = new OrderCart(itemCode,itemName,qty,itemPrice,totalItemPrice);
+       let orderCart = new OrderCart(itemCode,itemName,qty,itemPrice,totalItemPrice)
           cartItems.push(orderCart);
           loadCart();
       }
-
-
-
-
 });
 
 
 function loadCart(){
     var total=0;
 
+
     $("#orderTable").empty();
     cartItems.forEach(function (i) {
+        alert("loop");
         let row = `<tr><td>${i.getItemCode()}</td><td>${i.getItemName()}</td><td>${i.getItemQty()}</td><td>${i.getItemPrice()}</td><td>${i.getTotalItemPrice()}</td></tr>`;
         total+=i.getTotalItemPrice();
         $("#orderTable").append(row);
@@ -206,20 +217,62 @@ function genarateOrderId() {
 $("#btnOrderCusSearch").click(function () {
          let id = $("#orderCustomerID").val();
 
-         var customerExist=0
-         for (var i in customerDB){
-             if (id==customerDB[i].getId()){
-                 $("#orderCustomerName").val(customerDB[i].getName());
-                 $("#orderCustomerTp").val(customerDB[i].getTp());
-                 $("#orderCustomerAddress").val(customerDB[i].getAddress());
-                 customerExist=1;
-                 break;
-             }
-         }
-         if (customerExist==0){
-             alert("No Such as Customer ..!");
-         }
+    $.ajax({
+        url :"customer?option=GETONE&id="+id,
+        method : "GET",
+        success : function (res){
+            if (res.status==200){
+                $("#orderCustomerName").val(res.data.name);
+                $("#orderCustomerTp").val(res.data.tp);
+                $("#orderCustomerAddress").val(res.data.address);
+
+
+
+            }else if(res.status==400){
+                alert(res.message);
+            }
+        }
+
+
+
+    });
 
 
 });
 //customer search End
+
+$("#btnSubmitOrder").click(function (){
+
+    var order={
+        orderId : $("#txtOrderID").val(),
+        custId : $("#orderCustomerID").val(),
+        date : $("#txtDate").val()
+
+    }
+
+
+    $.ajax({
+        url : "order",
+        method : "POST",
+        contentType : "application/json",
+        data : JSON.stringify(order),
+        success : function (res) {
+             if (res.status==200){
+                 alert(res.message);
+             }else if (res==400){
+                 alert(res.message);
+             }
+
+
+        },
+        error : function (res){
+
+            alert("System Error");
+
+        }
+
+    })
+
+
+
+});

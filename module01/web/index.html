@@ -31,6 +31,9 @@
             color: #2a2222;
         }
 
+
+
+
     </style>
 </head>
 
@@ -258,7 +261,7 @@
             </div>
 
             <div class="col-md-12 mt-4" style="height:180px; overflow-y: scroll">
-                <table id="tblCustomerJson" class="table table-bordered text-white">
+                <table>
                     <thead class="bg-primary">
                     <tr>
                         <th>Customer Id</th>
@@ -268,10 +271,12 @@
                     </tr>
                     </thead>
 
-                    <tbody id="tblCustomerBody" class="bg-light text-dark" id="customerTable">
+                    <tbody id="tblCustomerBody" class="bg-light text-dark">
 
                     </tbody>
+
                 </table>
+
             </div>
         </div>
     </div>
@@ -361,7 +366,9 @@
                 </div>
             </div>
 
-            <div class="col-md-12 mt-4" style="height:180px; overflow-y: scroll">
+
+
+            <div class="tableFixHead"  class="col-md-12 mt-4" style="height:180px; overflow-y: scroll">
                 <table class="table table-hover table-bordered text-white">
                     <thead class="bg-primary">
                     <tr>
@@ -601,7 +608,8 @@
 
 <script src="assets/js/bootstrap.bundle.js"></script>
 <script src="assets/jQuery/jquery-3.6.0.min.js"></script>
-
+<script src="db/db.js"></script>
+<script  src="model/OrderCart.js"></script>
 
 
 <script src="controller/customerController.js"></script>

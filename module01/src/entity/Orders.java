@@ -9,16 +9,16 @@ import java.time.LocalDate;
  **/
 public class Orders {
     private String oid;
-    private LocalDate date;
-    private String customerID;
+    private String custId;
+    private String date;
 
     public Orders() {
     }
 
-    public Orders(String oid, LocalDate date, String customerID) {
+    public Orders(String oid, String custId, String date) {
         this.oid = oid;
+        this.custId = custId;
         this.date = date;
-        this.customerID = customerID;
     }
 
     public String getOid() {
@@ -29,19 +29,19 @@ public class Orders {
         this.oid = oid;
     }
 
-    public LocalDate getDate() {
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
+    }
+
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getCustomerID() {
-        return customerID;
-    }
-
-    public void setCustomerID(String customerID) {
-        this.customerID = customerID;
     }
 }
